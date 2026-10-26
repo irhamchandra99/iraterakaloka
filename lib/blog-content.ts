@@ -33,6 +33,25 @@ export function toArticleHtml(content: string | null | undefined) {
   return isHtmlContent(content) ? content : plainTextToHtml(content);
 }
 
+// Plain-text summary for meta descriptions (tags removed, basic entities decoded).
+export function toPlainTextSummary(content: string, maxLength = 160) {
+  const text = toArticleHtml(content)
+    .replace(/<[^>]*>/g, " ")
+    .replace(/&nbsp;/g, " ")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&amp;/g, "&")
+    .replace(/\s+/g, " ")
+    .trim();
+
+  if (text.length <= maxLength) return text;
+  const cut = text.slice(0, maxLength - 1);
+  const lastSpace = cut.lastIndexOf(" ");
+  return `${(lastSpace > 80 ? cut.slice(0, lastSpace) : cut).trimEnd()}…`;
+}
+
 // True when the HTML has no visible text (e.g. "<p></p>" from an empty editor).
 export function isContentEmpty(html: string) {
   return (
