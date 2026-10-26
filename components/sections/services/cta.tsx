@@ -7,11 +7,11 @@ export default function CTA() {
       <Container>
         <div className="mx-auto max-w-4xl text-center">
           <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#FFCA18]">
-            Let's Collaborate
+            Let&apos;s Collaborate
           </p>
 
           <h2 className="heading text-4xl leading-tight md:text-6xl">
-            Let's Build
+            Let&apos;s Build
             <br />
             Meaningful Impact
             <span className="text-[#FFCA18]"> Together.</span>

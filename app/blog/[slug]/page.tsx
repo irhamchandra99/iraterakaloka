@@ -2,7 +2,10 @@ import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
 import Container from "@/components/shared/container";
 import { supabase } from "@/lib/supabase";
+import Image from "next/image";
 import { notFound } from "next/navigation";
+import { isOptimizableImage } from "@/lib/image";
+import { sanitizeBlogHtml } from "@/lib/sanitize-blog-html";
 
 type Props = {
   params: Promise<{
@@ -70,9 +73,14 @@ export default async function BlogDetailPage({ params }: Props) {
           {post.cover_image && (
             <section className="py-12 md:py-16">
               <Container>
-                <img
+                <Image
                   src={post.cover_image}
                   alt={post.title}
+                  width={1600}
+                  height={900}
+                  sizes="(min-width: 1280px) 1152px, 100vw"
+                  preload
+                  unoptimized={!isOptimizableImage(post.cover_image)}
                   className="mx-auto max-h-[600px] w-full max-w-6xl rounded-[32px] object-cover"
                 />
               </Container>
@@ -89,9 +97,13 @@ export default async function BlogDetailPage({ params }: Props) {
                   </p>
                 )}
 
-                <div className="whitespace-pre-wrap text-lg leading-9 text-black/75">
-                  {post.content}
-                </div>
+                {/* Konten HTML dari editor, disanitasi di server sebelum dirender */}
+                <div
+                  className="rich-content article-content text-lg leading-9 text-black/75"
+                  dangerouslySetInnerHTML={{
+                    __html: sanitizeBlogHtml(post.content),
+                  }}
+                />
               </div>
             </Container>
           </section>

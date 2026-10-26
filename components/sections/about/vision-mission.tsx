@@ -30,10 +30,10 @@ export default function VisionMission() {
           </p>
 
           <h3 className="heading mt-6 text-3xl leading-relaxed md:text-5xl">
-            "Menjadi ruang bertumbuh yang
+            &quot;Menjadi ruang bertumbuh yang
             menginspirasi individu, komunitas,
             dan organisasi untuk berkembang
-            secara sadar, sehat, dan berdampak."
+            secara sadar, sehat, dan berdampak.&quot;
           </h3>
         </div>
 

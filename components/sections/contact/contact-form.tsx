@@ -15,7 +15,7 @@ export default function ContactForm() {
             </p>
 
             <h2 className="heading text-4xl md:text-5xl">
-              Let's Talk
+              Let&apos;s Talk
             </h2>
 
             <p className="mt-5 max-w-xl leading-8 text-black/60">

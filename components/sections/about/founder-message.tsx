@@ -20,11 +20,11 @@ export default function FounderMessage() {
             />
 
             <blockquote className="heading mt-10 text-3xl leading-relaxed">
-              "Growing begins when
+              &quot;Growing begins when
               <br />
               we dare to understand
               <br />
-              ourselves."
+              ourselves.&quot;
             </blockquote>
 
             <p className="mt-6 text-[#880A18] font-semibold">

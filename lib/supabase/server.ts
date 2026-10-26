@@ -19,7 +19,7 @@ export async function createClient() {
             });
           } catch {
             // Server Components tidak selalu dapat menulis cookies.
-            // Session refresh akan ditangani oleh proxy/middleware.
+            // Session refresh ditangani oleh proxy.ts (lib/supabase/proxy.ts).
           }
         },
       },

@@ -10,7 +10,7 @@ export default function Hero() {
           </p>
 
           <h1 className="heading text-5xl leading-tight md:text-7xl">
-            Let's Start
+            Let&apos;s Start
             <br />
             A Conversation.
           </h1>

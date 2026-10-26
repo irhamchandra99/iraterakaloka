@@ -1,5 +1,4 @@
 import Container from "@/components/shared/container";
-import Image from "next/image";
 
 export default function Story() {
   return (

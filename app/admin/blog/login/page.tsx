@@ -1,111 +1,127 @@
+
 "use client";
 
-import { FormEvent, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import Container from "@/components/shared/container";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/client";
 
 export default function AdminLoginPage() {
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  async function handleLogin(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
+  const supabase = createClient();
 
-    setError("");
+  async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
     setLoading(true);
+    setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const { data, error: loginError } =
+        await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-    if (error) {
-      setError("Email atau password salah.");
+      if (loginError) {
+        throw new Error(loginError.message);
+      }
+
+      if (!data.user) {
+        throw new Error("User tidak ditemukan.");
+      }
+
+      const { data: admin, error: adminError } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", data.user.id)
+        .maybeSingle();
+
+      if (adminError || !admin) {
+        await supabase.auth.signOut();
+        throw new Error("Akun ini tidak memiliki akses admin.");
+      }
+
+      router.replace("/admin/blog");
+      router.refresh();
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Login gagal."
+      );
+    } finally {
       setLoading(false);
-      return;
     }
-
-    router.push("/admin/blog");
-    router.refresh();
   }
 
   return (
-    <main className="min-h-screen bg-[#FCFAF7] py-20">
-      <Container>
-        <div className="mx-auto max-w-md">
-          <div className="rounded-[32px] bg-white p-8 shadow-sm md:p-10">
-            <p className="text-sm font-semibold uppercase tracking-[0.3em] text-[#880A18]">
-              Iratera Admin
-            </p>
-
-            <h1 className="heading mt-4 text-4xl">
-              Welcome Back
-            </h1>
-
-            <p className="mt-4 leading-7 text-black/60">
-              Sign in to manage Iratera articles.
-            </p>
-
-            <form
-              onSubmit={handleLogin}
-              className="mt-8 space-y-5"
-            >
-              <div>
-                <label className="mb-2 block font-medium">
-                  Email
-                </label>
-
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(event) =>
-                    setEmail(event.target.value)
-                  }
-                  required
-                  className="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none transition focus:border-[#880A18]"
-                  placeholder="admin@example.com"
-                />
-              </div>
-
-              <div>
-                <label className="mb-2 block font-medium">
-                  Password
-                </label>
-
-                <input
-                  type="password"
-                  value={password}
-                  onChange={(event) =>
-                    setPassword(event.target.value)
-                  }
-                  required
-                  className="w-full rounded-2xl border border-black/10 px-5 py-4 outline-none transition focus:border-[#880A18]"
-                  placeholder="••••••••"
-                />
-              </div>
-
-              {error && (
-                <p className="rounded-xl bg-red-50 px-4 py-3 text-sm text-red-600">
-                  {error}
-                </p>
-              )}
-
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full rounded-full bg-[#880A18] px-6 py-4 font-semibold text-white transition hover:bg-[#6E0814] disabled:cursor-not-allowed disabled:opacity-60"
-              >
-                {loading ? "Signing in..." : "Sign In"}
-              </button>
-            </form>
-          </div>
+    <main className="flex min-h-screen items-center justify-center bg-[#FCFAF7] px-4">
+      <div className="w-full max-w-md rounded-2xl border border-gray-200 bg-white p-8 shadow-sm">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-[#880A18]">
+            Iratera Kaloka
+          </h1>
+          <p className="mt-2 text-sm text-gray-500">
+            Admin Content Management System
+          </p>
         </div>
-      </Container>
+
+        <form onSubmit={handleLogin} className="space-y-5">
+          <div>
+            <label
+              htmlFor="email"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Email
+            </label>
+            <input
+              id="email"
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="admin@iraterakaloka.com"
+              autoComplete="email"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#880A18]"
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="password"
+              className="mb-2 block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              id="password"
+              type="password"
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Masukkan password"
+              autoComplete="current-password"
+              className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-900 outline-none focus:border-[#880A18]"
+            />
+          </div>
+
+          {error && (
+            <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700">
+              {error}
+            </p>
+          )}
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full rounded-lg bg-[#880A18] px-4 py-3 font-semibold text-white transition hover:bg-[#6d0813] disabled:opacity-60"
+          >
+            {loading ? "Signing in..." : "Sign In"}
+          </button>
+        </form>
+      </div>
     </main>
   );
 }

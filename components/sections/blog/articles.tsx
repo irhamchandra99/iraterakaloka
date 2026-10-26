@@ -1,5 +1,7 @@
 import Container from "@/components/shared/container";
+import Image from "next/image";
 import Link from "next/link";
+import { isOptimizableImage } from "@/lib/image";
 
 type Post = {
   id: string;
@@ -38,9 +40,13 @@ export default function Articles({
                 className="overflow-hidden rounded-[30px] border border-black/5 bg-[#FCFAF7] transition duration-300 hover:-translate-y-2 hover:shadow-xl"
               >
                 {post.cover_image && (
-                  <img
+                  <Image
                     src={post.cover_image}
                     alt={post.title}
+                    width={800}
+                    height={512}
+                    sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+                    unoptimized={!isOptimizableImage(post.cover_image)}
                     className="h-64 w-full object-cover"
                   />
                 )}
