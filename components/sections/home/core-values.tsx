@@ -1,4 +1,6 @@
 import Container from "@/components/shared/container";
+import { ValuesScene } from "@/components/motion/home-scenes";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const values = [
   {
@@ -35,53 +37,71 @@ const values = [
 
 export default function CoreValues() {
   return (
-    <section className="py-32 bg-white">
+    <ValuesScene className="overflow-x-clip py-24 md:py-32">
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#880A18]">
-            Nilai Iratera
-          </p>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
+          <div className="lg:col-span-4">
+            <div className="lg:sticky lg:top-28">
+              <Eyebrow>Nilai Iratera</Eyebrow>
+              <h2 className="mt-6 font-display text-heading-lg font-bold text-ink">
+                The Values That{" "}
+                <span className="text-maroon">Guide Our Journey</span>
+              </h2>
+              <p className="mt-6 leading-8 text-ink/75">
+                Setiap program, layanan, dan ruang yang kami hadirkan dibangun
+                di atas nilai-nilai yang menjadi fondasi perjalanan Iratera
+                Kaloka.
+              </p>
 
-          <h2 className="heading text-5xl md:text-6xl">
-            The Values That{" "}
-            <span className="text-[#880A18]">
-              Guide Our Journey
-            </span>
-          </h2>
-
-          <p className="mt-8 text-lg leading-8 text-black/60">
-            Setiap program, layanan, dan ruang yang kami hadirkan dibangun di
-            atas nilai-nilai yang menjadi fondasi perjalanan Iratera Kaloka.
-          </p>
-        </div>
-
-        <div className="mt-24">
-          {values.map((value) => (
-            <div
-              key={value.number}
-              className="group py-8 border-b border-black/10"
-            >
-              <div className="grid gap-6 md:grid-cols-[1.3fr_0.9fr] md:items-start">
-
-                <div className="flex items-center gap-8">
-                  <span className="heading w-16 text-4xl md:text-5xl text-[#880A18] transition duration-300 group-hover:text-[#FFCA18]">
-                    {value.number}
-                  </span>
-
-                  <h3 className="heading text-2xl md:text-4xl transition duration-300 group-hover:translate-x-2">
-                    {value.title}
-                  </h3>
-                </div>
-
-                <p className="max-w-xl pl-24 text-black/60 leading-8 md:pl-0">
-                  {value.description}
-                </p>
-
+              {/* Progress rail, shown only while the sequence is pinned */}
+              <div
+                aria-hidden="true"
+                data-values-rail
+                className="relative mt-10 hidden h-1 max-w-xs rounded-full bg-maroon/15"
+              >
+                <div
+                  data-values-progress
+                  className="h-full w-full origin-left rounded-full bg-gold"
+                />
+                <span
+                  data-values-orb
+                  className="absolute left-0 top-1/2 h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border-[3px] border-maroon bg-gold"
+                />
               </div>
             </div>
-          ))}
+          </div>
+
+          <div className="lg:col-span-7 lg:col-start-6">
+            <ol data-values-list className="border-t border-maroon/15">
+              {values.map((value) => (
+                <li
+                  key={value.number}
+                  data-value-item
+                  className="group grid gap-3 border-b border-maroon/15 py-8 sm:grid-cols-[5.5rem_1fr] sm:gap-6"
+                >
+                  <span
+                    data-value-number
+                    className="font-display text-4xl font-bold text-maroon md:text-5xl"
+                  >
+                    {value.number}
+                  </span>
+                  <div>
+                    <h3
+                      data-value-title
+                      className="font-display text-2xl font-semibold text-ink transition-transform duration-300 group-hover:translate-x-1 motion-reduce:transition-none md:text-3xl"
+                    >
+                      {value.title}
+                    </h3>
+                    <p className="mt-3 max-w-xl leading-7 text-ink/75">
+                      {value.description}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
         </div>
       </Container>
-    </section>
+    </ValuesScene>
   );
 }

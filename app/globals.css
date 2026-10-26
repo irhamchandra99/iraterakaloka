@@ -19,8 +19,43 @@ html {
   scroll-behavior: smooth;
 }
 
+/* Brand tokens -> Tailwind utilities (bg-cream, text-maroon, font-display, ...) */
+@theme inline {
+  --color-maroon: #880A18;
+  --color-maroon-deep: #6E0814;
+  --color-gold: #FFCA18;
+  --color-cream: #FCFAF7;
+  --color-sand: #F3ECE2;
+  --color-ink: #3B2A2A;
+  --font-display: var(--font-heading);
+}
+
+/* Fluid type scale (375px -> 1440px) */
+@utility text-display {
+  font-size: clamp(2.75rem, 1rem + 5.2vw, 5.75rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+}
+
+@utility text-heading-xl {
+  font-size: clamp(2.25rem, 1.2rem + 3.6vw, 4.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+@utility text-heading-lg {
+  font-size: clamp(1.875rem, 1.2rem + 2.4vw, 3.25rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+}
+
+@utility text-lead {
+  font-size: clamp(1.0625rem, 1rem + 0.35vw, 1.25rem);
+  line-height: 1.7;
+}
+
 body {
-  background: var(--cream-2);
+  background: #FCFAF7;
   color: var(--dark);
   font-family: var(--font-body);
 }
@@ -123,4 +158,116 @@ body {
   .article-content h2 {
     font-size: 2em;
   }
+}
+
+/* Gold highlight under a phrase (decoration only, text stays readable). */
+.mark-gold {
+  text-decoration-line: underline;
+  text-decoration-color: var(--gold);
+  text-decoration-thickness: 0.14em;
+  text-underline-offset: 0.1em;
+  text-decoration-skip-ink: none;
+}
+
+/*
+ * Homepage hero intro. Elements start hidden only when motion is allowed;
+ * GSAP reveals them. The delayed animation is a failsafe so content still
+ * appears if JavaScript fails; <noscript> in HeroIntro shows it immediately.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  [data-hero-intro] :is([data-hero-title], [data-hero-fade], [data-hero-art]) {
+    visibility: hidden;
+    animation: hero-failsafe 0s linear 3s forwards;
+  }
+}
+
+@keyframes hero-failsafe {
+  to {
+    visibility: visible;
+  }
+}
+
+/*
+ * Homepage scroll scenes. These classes are added by JavaScript only on
+ * desktop with motion allowed (components/motion/home-scenes.tsx), so
+ * without JS or with reduced motion the sections keep their normal layout.
+ */
+
+/* Scene 02: About continues the hero's gold; its content opens as a circle */
+.about-portal {
+  padding-block: 0;
+  background-color: var(--gold);
+}
+
+.about-portal [data-about-reveal] {
+  padding-block: 8rem;
+  background-color: #FCFAF7;
+}
+
+/* Scene 04b: values stacked on one stage, typography enlarged */
+.values-stage {
+  display: flex;
+  min-height: calc(100svh - 5rem);
+  align-items: center;
+}
+
+.values-stage > * {
+  width: 100%;
+}
+
+.values-stage [data-values-list] {
+  display: grid;
+  border-top-width: 0;
+}
+
+.values-stage [data-value-item] {
+  grid-area: 1 / 1;
+  grid-template-columns: 9rem 1fr;
+  border-bottom-width: 0;
+}
+
+.values-stage [data-value-number] {
+  font-size: clamp(4rem, 2rem + 4vw, 7.5rem);
+  line-height: 1;
+}
+
+.values-stage [data-value-title] {
+  font-size: clamp(2.25rem, 1rem + 2.6vw, 3.75rem);
+  line-height: 1.05;
+  letter-spacing: -0.025em;
+  transition: none;
+}
+
+.values-stage [data-value-item] p {
+  font-size: 1.125rem;
+}
+
+.values-stage [data-values-rail],
+.programs-rail [data-programs-progress-wrap] {
+  display: block;
+}
+
+/* Scene 05: programs become a horizontal sequence of scenes */
+.programs-rail {
+  padding-block: 2.5rem;
+}
+
+.programs-rail [data-programs-track] {
+  display: flex;
+  width: max-content;
+  gap: 2rem;
+  margin-top: 2.5rem;
+}
+
+.programs-rail [data-program-item] {
+  width: min(56rem, 74vw);
+  flex: none;
+  grid-template-columns: 1fr 1fr;
+  padding: 2.5rem;
+}
+
+.programs-rail [data-program-item] img {
+  max-height: 42vh;
+  width: auto;
+  margin-inline: auto;
 }
