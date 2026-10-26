@@ -1,5 +1,9 @@
+import Image from "next/image";
 import Container from "@/components/shared/container";
+import { JourneyScene } from "@/components/motion/about-scenes";
+import Eyebrow from "@/components/ui/eyebrow";
 
+// Scene 03: a conceptual journey through the existing values (not a history).
 const values = [
   {
     number: "01",
@@ -35,51 +39,85 @@ const values = [
 
 export default function CoreValues() {
   return (
-    <section className="bg-white py-28 md:py-36">
+    <JourneyScene className="relative overflow-x-clip bg-cream py-24 md:py-32">
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#880A18]">
-            Our Values
-          </p>
-
-          <h2 className="heading text-4xl md:text-6xl">
-            The Principles That
-            <span className="text-[#880A18]"> Shape Every Journey</span>
+        <div className="max-w-3xl">
+          <Eyebrow>Our Values</Eyebrow>
+          <h2 className="mt-6 font-display text-heading-xl font-bold text-ink">
+            The Principles That{" "}
+            <span className="text-maroon">Shape Every Journey</span>
           </h2>
-
-          <p className="mx-auto mt-8 max-w-2xl text-lg leading-8 text-black/60">
+          <p className="mt-6 max-w-2xl text-lead text-ink/75">
             Nilai-nilai ini menjadi fondasi dalam setiap program, layanan,
             maupun kolaborasi yang kami bangun bersama.
           </p>
         </div>
 
-        <div className="mt-24">
-          {values.map((value, index) => (
-            <div
-              key={value.number}
-              className={`grid gap-8 border-t border-black/10 py-12 md:grid-cols-[120px_1fr] ${
-                index === values.length - 1 ? "border-b" : ""
-              }`}
-            >
-              <div>
-                <p className="heading text-5xl text-[#FFCA18]">
-                  {value.number}
-                </p>
-              </div>
+        {/* Route: values alternate sides; on desktop the walkers follow a
+            path drawn between them. The path is built from measured stops. */}
+        <div data-aj-route className="relative mt-16 lg:mt-24">
+          <svg
+            aria-hidden="true"
+            data-aj-svg
+            className="pointer-events-none absolute inset-0 hidden h-full w-full overflow-visible"
+          >
+            <path
+              data-aj-path
+              fill="none"
+              stroke="#880A18"
+              strokeOpacity="0.3"
+              strokeWidth="3"
+              strokeLinecap="round"
+            />
+          </svg>
 
-              <div>
-                <h3 className="heading text-3xl md:text-4xl">
-                  {value.title}
-                </h3>
+          <div
+            data-aj-walker
+            className="relative mx-auto mb-10 w-full max-w-xs lg:absolute lg:right-[6%] lg:top-0 lg:z-10 lg:mb-0 lg:w-[20%] lg:max-w-none"
+          >
+            <Image
+              src="/illustrations/about-story.webp"
+              alt=""
+              width={1536}
+              height={1024}
+              sizes="(min-width: 1024px) 20vw, 20rem"
+              className="h-auto w-full"
+            />
+          </div>
 
-                <p className="mt-5 max-w-3xl text-lg leading-8 text-black/65">
-                  {value.description}
-                </p>
-              </div>
-            </div>
-          ))}
+          <ol className="relative">
+            {values.map((value, index) => (
+              <li
+                key={value.number}
+                data-aj-stop
+                className={`relative border-t border-maroon/15 py-8 lg:flex lg:min-h-[52vh] lg:items-center lg:border-t-0 lg:py-0 ${
+                  index % 2 === 0 ? "" : "lg:justify-end"
+                }`}
+              >
+                <span
+                  aria-hidden="true"
+                  data-aj-marker
+                  className="absolute hidden h-5 w-5 -translate-x-1/2 -translate-y-1/2 rounded-full border-4 border-maroon bg-gold"
+                />
+                <div data-aj-card className="lg:w-[46%]">
+                  <span
+                    data-aj-number
+                    className="block font-display text-6xl font-bold leading-none text-maroon md:text-7xl"
+                  >
+                    {value.number}
+                  </span>
+                  <h3 className="mt-4 font-display text-heading-lg font-bold text-ink">
+                    {value.title}
+                  </h3>
+                  <p className="mt-3 max-w-md text-lead text-ink/75">
+                    {value.description}
+                  </p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
       </Container>
-    </section>
+    </JourneyScene>
   );
 }

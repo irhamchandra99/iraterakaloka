@@ -1,14 +1,16 @@
 import Navbar from "@/components/layout/navbar";
 import Footer from "@/components/layout/footer";
+import ScrollRefresh from "@/components/motion/scroll-refresh";
 
 import Hero from "@/components/sections/about/hero";
 import Story from "@/components/sections/about/story";
+import CoreValues from "@/components/sections/about/core-values";
 import VisionMission from "@/components/sections/about/vision-mission";
 import FounderMessage from "@/components/sections/about/founder-message";
-import Team from "@/components/sections/about/team";
-import CoreValues from "@/components/sections/about/core-values";
+import Closing from "@/components/sections/about/closing";
 
-export default function Home() {
+// The story behind Iratera, told as six connected scenes.
+export default function AboutPage() {
   return (
     <>
       <Navbar />
@@ -16,11 +18,13 @@ export default function Home() {
       <main>
         <Hero />
         <Story />
+        <CoreValues />
         <VisionMission />
         <FounderMessage />
-        <CoreValues />
-        <Team/>
+        <Closing />
       </main>
+
+      <ScrollRefresh />
 
       <Footer />
     </>

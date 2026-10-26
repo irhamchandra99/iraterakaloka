@@ -1,4 +1,6 @@
 import Container from "@/components/shared/container";
+import { VisionMissionScene } from "@/components/motion/about-scenes";
+import Eyebrow from "@/components/ui/eyebrow";
 
 const missions = [
   "Menyediakan ruang belajar, refleksi, dan pengembangan diri yang aman serta bermakna.",
@@ -7,55 +9,65 @@ const missions = [
   "Berkolaborasi dengan individu maupun organisasi untuk menciptakan dampak yang berkelanjutan.",
 ];
 
+// Scene 04: Vision takes the stage, then gives way to Mission.
 export default function VisionMission() {
   return (
-    <section className="bg-[#FFFCF6] py-28 md:py-36">
+    <VisionMissionScene className="relative overflow-hidden bg-sand py-24 md:py-32">
+      <div
+        aria-hidden="true"
+        data-vm-disc
+        className="absolute -right-24 top-16 h-72 w-72 rounded-full bg-maroon md:h-96 md:w-96"
+      />
+      <div
+        aria-hidden="true"
+        data-vm-ring
+        className="absolute -bottom-20 left-[8%] hidden h-56 w-56 rounded-full border-[20px] border-gold lg:block"
+      />
+
       <Container>
-        <div className="mx-auto max-w-3xl text-center">
-          <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#880A18]">
-            Our Direction
-          </p>
-
-          <h2 className="heading text-4xl md:text-6xl">
-            Vision &
-            <span className="text-[#880A18]"> Mission</span>
+        <div className="relative">
+          <Eyebrow>Our Direction</Eyebrow>
+          <h2 className="mt-4 font-display text-2xl font-bold text-ink md:text-3xl">
+            Vision &amp; <span className="text-maroon">Mission</span>
           </h2>
-        </div>
 
-        {/* Vision */}
-
-        <div className="mx-auto mt-20 max-w-5xl rounded-[36px] bg-white p-10 shadow-sm md:p-16">
-          <p className="text-sm font-semibold uppercase tracking-[0.25em] text-[#880A18]">
-            Vision
-          </p>
-
-          <h3 className="heading mt-6 text-3xl leading-relaxed md:text-5xl">
-            &quot;Menjadi ruang bertumbuh yang
-            menginspirasi individu, komunitas,
-            dan organisasi untuk berkembang
-            secara sadar, sehat, dan berdampak.&quot;
-          </h3>
-        </div>
-
-        {/* Mission */}
-
-        <div className="mt-20 grid gap-6">
-          {missions.map((mission, index) => (
-            <div
-              key={index}
-              className="flex gap-8 rounded-[30px] border border-black/5 bg-white p-8 transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <div className="heading min-w-[70px] text-5xl text-[#FFCA18]">
-                {String(index + 1).padStart(2, "0")}
-              </div>
-
-              <p className="max-w-3xl text-lg leading-8 text-black/70">
-                {mission}
+          <div data-vm-stage className="mt-12 grid gap-16">
+            <div data-vm-vision className="lg:pr-[14%]">
+              <h3 className="text-[0.8125rem] font-semibold uppercase tracking-[0.2em] text-maroon">
+                Vision
+              </h3>
+              <p
+                data-vm-quote
+                className="mt-6 font-display text-heading-xl font-bold text-ink"
+              >
+                &ldquo;Menjadi ruang bertumbuh yang menginspirasi individu,
+                komunitas, dan organisasi untuk berkembang secara sadar, sehat,
+                dan berdampak.&rdquo;
               </p>
             </div>
-          ))}
+
+            <div data-vm-mission className="lg:ml-[38%]">
+              <h3 className="text-[0.8125rem] font-semibold uppercase tracking-[0.2em] text-maroon">
+                Mission
+              </h3>
+              <ol className="mt-6 border-t border-maroon/20">
+                {missions.map((mission, index) => (
+                  <li
+                    key={mission}
+                    data-vm-item
+                    className="grid grid-cols-[3.5rem_1fr] gap-4 border-b border-maroon/20 py-5"
+                  >
+                    <span className="font-display text-2xl font-bold text-maroon">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <p className="text-lead text-ink/80">{mission}</p>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
         </div>
       </Container>
-    </section>
+    </VisionMissionScene>
   );
 }
